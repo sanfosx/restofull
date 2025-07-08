@@ -577,6 +577,75 @@
         listarProductos();
       });
     }
+    function postAPI(seccion, action, data = {}) {
+    return fetch("/api/proxy", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ seccion, action, data }),
+    })
+      .then(res => res.json())
+      .catch(err => ({ success: false, message: "Error al conectar", error: err }));
+  }
+
+  function cerrarModal(id) {
+    document.getElementById(id).classList.add("hidden");
+  }
+
+  function mostrarResultado(res) {
+    const div = document.getElementById("resultado") || document.createElement("div");
+    div.id = "resultado";
+    div.className = "mt-6 text-sm text-gray-600 whitespace-pre-wrap";
+    div.textContent = JSON.stringify(res, null, 2);
+    if (!document.body.contains(div)) document.body.appendChild(div);
+  }
+
+  function clearResultado() {
+    const div = document.getElementById("resultado");
+    if (div) div.innerHTML = "";
+  }
+
+  function renderTabla(seccion, data) {
+    const table = document.getElementById(`tabla${capitalize(seccion)}`);
+    const thead = table.querySelector("thead");
+    const tbody = table.querySelector("tbody");
+
+    if (!data || data.length === 0) {
+      table.classList.add("hidden");
+      return;
+    }
+
+    let columnas = Object.keys(data[0]);
+    columnas.push("Acciones");
+
+    thead.innerHTML = "<tr>" + columnas.map(k => `<th class='px-4 py-2 text-left'>${k}</th>`).join("") + "</tr>";
+
+    tbody.innerHTML = data.map(row => {
+      let acciones = `<button onclick='abrirModalProducto(${JSON.stringify(row)})' class='text-blue-600 hover:underline mr-2'>Editar</button>
+                      <button onclick='eliminarProductoPorID("${row.ID}")' class='text-red-600 hover:underline'>Eliminar</button>`;
+      return (
+        "<tr class='border-b'>" +
+        Object.values(row).map((v) => `<td class='px-4 py-2'>${v}</td>`).join("") +
+        `<td class='px-4 py-2'>${acciones}</td></tr>`
+      );
+    }).join("");
+
+    table.classList.remove("hidden");
+  }
+
+  function capitalize(texto) {
+    return texto.charAt(0).toUpperCase() + texto.slice(1);
+  }
+
+  function mostrarSeccion(seccion) {
+    document.querySelectorAll(".seccion").forEach((s) => s.classList.add("hidden"));
+    document.getElementById(seccion).classList.remove("hidden");
+    document.querySelectorAll(".btn-tab").forEach(b => b.classList.remove("active"));
+    const boton = document.getElementById("tab" + capitalize(seccion) + "Btn");
+    if (boton) boton.classList.add("active");
+
+    if (seccion === "productos") listarProductos();
+    clearResultado();
+  }
     
     // Inicializar con clientes visibles
     window.onload = () => mostrarSeccion("clientes");
