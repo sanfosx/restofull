@@ -520,6 +520,10 @@
           acciones = `
             <button onclick='abrirModalMesa(${JSON.stringify(row)})' class='text-blue-600 hover:underline mr-2'>Editar</button>
             <button onclick='eliminarMesaPorID("${row.ID}")' class='text-red-600 hover:underline'>Eliminar</button>`;
+        } else if (seccion === "productos") {
+          acciones = `
+            <button onclick='abrirModalProducto(${JSON.stringify(row)})' class='text-blue-600 hover:underline mr-2'>Editar</button>
+            <button onclick='eliminarProductoPorID("${row.ID}")' class='text-red-600 hover:underline'>Eliminar</button>`;
         }
         return (
           "<tr class='border-b'>" +
