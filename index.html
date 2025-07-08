@@ -1,0 +1,74 @@
+function handleClientes(action, data) {
+  const hoja = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Clientes");
+  const datos = hoja.getDataRange().getValues();
+  const headers = datos[0];
+  const rows = datos.slice(1);
+
+  switch (action) {
+    case "listar":
+      return rows.map(row => Object.fromEntries(row.map((v, i) => [headers[i], v])));
+
+    case "crear":
+      return crearCliente(hoja, headers, rows, data);
+
+    case "buscar":
+      return buscarCliente(headers, rows, data);
+
+    case "actualizar":
+      return actualizarCliente(hoja, headers, rows, data);
+
+    case "eliminar":
+      return eliminarCliente(hoja, rows, data);
+
+    default:
+      throw new Error("Acción no válida en Clientes");
+  }
+}
+
+function crearCliente(hoja, headers, rows, data) {
+  const nuevoID = generarID("C", rows.length + 1);
+  const fecha = new Date();
+
+  const fila = [
+    nuevoID,
+    data.Nombre || "",
+    data.Teléfono || "",
+    data.Email || "",
+    data.Dirección || "",
+    fecha,
+    "Activo"
+  ];
+
+  hoja.appendRow(fila);
+  return { id: nuevoID, creado: true };
+}
+
+function buscarCliente(headers, rows, data) {
+  const fila = rows.find(r => r[0] === data.ID);
+  if (!fila) throw new Error("Cliente no encontrado");
+  return Object.fromEntries(fila.map((v, i) => [headers[i], v]));
+}
+
+function actualizarCliente(hoja, headers, rows, data) {
+  const idx = rows.findIndex(r => r[0] === data.ID);
+  if (idx === -1) throw new Error("Cliente no encontrado");
+
+  headers.forEach((h, i) => {
+    if (h !== "ID" && data[h] !== undefined) {
+      hoja.getRange(idx + 2, i + 1).setValue(data[h]);
+    }
+  });
+
+  return { actualizado: true };
+}
+
+function eliminarCliente(hoja, rows, data) {
+  const idx = rows.findIndex(r => r[0] === data.ID);
+  if (idx === -1) throw new Error("Cliente no encontrado");
+  hoja.deleteRow(idx + 2);
+  return { eliminado: true };
+}
+
+function generarID(prefijo, numero) {
+  return prefijo + ("000" + numero).slice(-3);
+}
