@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestión de Clientes</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f9f9f9; }
+    input, button { padding: 8px; margin: 5px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #eee; }
+  </style>
+</head>
+<body>
+
+  <h2>Gestión de Clientes</h2>
+
+  <form id="clienteForm">
+    <input type="text" id="ID" placeholder="ID (solo para buscar/actualizar/eliminar)">
+    <input type="text" id="Nombre" placeholder="Nombre" required>
+    <input type="text" id="Teléfono" placeholder="Teléfono">
+    <input type="email" id="Email" placeholder="Email">
+    <input type="text" id="Dirección" placeholder="Dirección">
+    <br/>
+    <button type="button" onclick="crearCliente()">Crear</button>
+    <button type="button" onclick="buscarCliente()">Buscar</button>
+    <button type="button" onclick="actualizarCliente()">Actualizar</button>
+    <button type="button" onclick="eliminarCliente()">Eliminar</button>
+    <button type="button" onclick="listarClientes()">Listar Todos</button>
+  </form>
+
+  <div id="resultado"></div>
+
+  <table id="tablaClientes" style="display:none;">
+    <thead></thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const API_URL = "/api/proxy"; // <- REEMPLAZA CON TU URL del Web App publicada
+
+    function postAPI(endpoint, action, data = {}) {
+      return fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({ endpoint, action, data }),
+        headers: { "Content-Type": "application/json" },
+      }).then(res => res.json());
+    }
+
+    function mostrarResultado(msg) {
+      document.getElementById("resultado").innerText = JSON.stringify(msg, null, 2);
+    }
+
+    function getFormData() {
+      return {
+        ID: document.getElementById("ID").value.trim(),
+        Nombre: document.getElementById("Nombre").value.trim(),
+        Teléfono: document.getElementById("Teléfono").value.trim(),
+        Email: document.getElementById("Email").value.trim(),
+        Dirección: document.getElementById("Dirección").value.trim()
+      };
+    }
+
+    function crearCliente() {
+      const data = getFormData();
+      postAPI("clientes", "crear", data).then(mostrarResultado);
+    }
+
+    function buscarCliente() {
+      const id = document.getElementById("ID").value.trim();
+      if (!id) return alert("Ingresá el ID");
+      postAPI("clientes", "buscar", { ID: id }).then(mostrarResultado);
+    }
+
+    function actualizarCliente() {
+      const data = getFormData();
+      if (!data.ID) return alert("Ingresá el ID para actualizar");
+      postAPI("clientes", "actualizar", data).then(mostrarResultado);
+    }
+
+    function eliminarCliente() {
+      const id = document.getElementById("ID").value.trim();
+      if (!id) return alert("Ingresá el ID para eliminar");
+      postAPI("clientes", "eliminar", { ID: id }).then(mostrarResultado);
+    }
+
+    function listarClientes() {
+      postAPI("clientes", "listar").then(res => {
+        if (!res.success) return mostrarResultado(res);
+        renderTabla(res.data);
+      });
+    }
+
+    function renderTabla(data) {
+      const table = document.getElementById("tablaClientes");
+      const thead = table.querySelector("thead");
+      const tbody = table.querySelector("tbody");
+      if (data.length === 0) {
+        table.style.display = "none";
+        return;
+      }
+
+      thead.innerHTML = "<tr>" + Object.keys(data[0]).map(k => `<th>${k}</th>`).join("") + "</tr>";
+      tbody.innerHTML = data.map(row =>
+        "<tr>" + Object.values(row).map(v => `<td>${v}</td>`).join("") + "</tr>"
+      ).join("");
+
+      table.style.display = "table";
+    }
+  </script>
+</body>
+</html>
