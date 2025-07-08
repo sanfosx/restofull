@@ -64,6 +64,21 @@
       </div>
     </section>
 
+     <!-- Productos -->
+    <section id="productos" class="seccion hidden">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold">Listado de Productos</h2>
+        <input type="text" id="buscadorProductos" oninput="filtrarTabla('productos')" placeholder="Buscar producto..." class="input-field w-1/3" />
+        <button onclick="abrirModalProducto()" class="btn bg-green-600 hover:bg-green-700 ml-4">+ Nuevo Producto</button>
+      </div>
+      <div class="overflow-auto rounded-lg">
+        <table id="tablaProductos" class="w-full table-auto border-collapse hidden">
+          <thead class="bg-gray-200 text-gray-700"></thead>
+          <tbody class="text-sm"></tbody>
+        </table>
+      </div>
+    </section>
+
 
     <div id="resultado" class="mt-6 text-sm text-gray-600 whitespace-pre-wrap"></div>
   </div>
@@ -132,6 +147,26 @@
         <button onclick="guardarMesa()" class="btn bg-blue-600 hover:bg-blue-700">Guardar</button>
       </div>
     </div>
+
+    <!-- Modal Producto -->
+    <div id="modalProducto" class="modal hidden">
+      <div class="modal-content">
+        <h2 class="text-xl font-semibold mb-4">Nuevo / Editar Producto</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input type="hidden" id="modalProductoID" />
+          <input id="modalProductoNombre" placeholder="Nombre del producto" class="input-field" />
+          <input id="modalProductoPrecio" type="number" placeholder="Precio" class="input-field" />
+          <input id="modalProductoCategoria" placeholder="Categoría" class="input-field" />
+          <input id="modalProductoDescripcion" placeholder="Descripción" class="input-field" />
+          <input id="modalProductoStock" type="number" placeholder="Stock" class="input-field" />
+        </div>
+        <div class="mt-6 flex justify-end gap-2">
+          <button onclick="cerrarModal('modalProducto')" class="btn bg-gray-500 hover:bg-gray-600">Cancelar</button>
+          <button onclick="guardarProducto()" class="btn bg-blue-600 hover:bg-blue-700">Guardar</button>
+        </div>
+      </div>
+    </div>
+    
   </div>
 
   <style>
@@ -493,6 +528,49 @@
       }).join("");
 
       table.classList.remove("hidden");
+    }
+
+     // Productos
+    function listarProductos() {
+      postAPI("productos", "listar").then(res => {
+        if (!res.success) return mostrarResultado(res);
+        renderTabla("productos", res.data);
+      });
+    }
+
+    function abrirModalProducto(producto = null) {
+      document.getElementById("modalProductoID").value = producto?.ID || "";
+      document.getElementById("modalProductoNombre").value = producto?.Nombre || "";
+      document.getElementById("modalProductoPrecio").value = producto?.Precio || "";
+      document.getElementById("modalProductoCategoria").value = producto?.Categoría || "";
+      document.getElementById("modalProductoDescripcion").value = producto?.Descripción || "";
+      document.getElementById("modalProductoStock").value = producto?.Stock || "";
+      document.getElementById("modalProducto").classList.remove("hidden");
+    }
+
+    function guardarProducto() {
+      const data = {
+        ID: document.getElementById("modalProductoID").value.trim(),
+        Nombre: document.getElementById("modalProductoNombre").value.trim(),
+        Precio: parseFloat(document.getElementById("modalProductoPrecio").value.trim()),
+        Categoría: document.getElementById("modalProductoCategoria").value.trim(),
+        Descripción: document.getElementById("modalProductoDescripcion").value.trim(),
+        Stock: parseInt(document.getElementById("modalProductoStock").value.trim()),
+      };
+      const action = data.ID ? "actualizar" : "crear";
+      postAPI("productos", action, data).then((res) => {
+        mostrarResultado(res);
+        cerrarModal("modalProducto");
+        listarProductos();
+      });
+    }
+
+    function eliminarProductoPorID(id) {
+      if (!confirm("¿Estás seguro que deseas eliminar este producto?")) return;
+      postAPI("productos", "eliminar", { ID: id }).then((res) => {
+        mostrarResultado(res);
+        listarProductos();
+      });
     }
     
     // Inicializar con clientes visibles
