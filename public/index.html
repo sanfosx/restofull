@@ -1,52 +1,16 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Panel Admin - Restaurante</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-</head>
-
 <body class="bg-gray-100 text-gray-900">
   <div class="min-h-screen p-6 max-w-6xl mx-auto">
+    <header class="flex justify-between items-center mb-8">
      <header class="flex justify-between items-center mb-8">
       <h1 class="text-2xl font-bold">Panel de Administración</h1>
       <nav>
         <button id="tabClientesBtn" class="btn-tab active" onclick="mostrarSeccion('clientes')">Clientes</button>
         <button id="tabUsuariosBtn" class="btn-tab" onclick="mostrarSeccion('usuarios')">Usuarios</button>
         <button id="tabMesasBtn" class="btn-tab" onclick="mostrarSeccion('mesas')">Mesas</button>
-        <button id="tabProductosBtn" class="btn-tab" onclick="mostrarSeccion('productos')">Productos</button>
       </nav>
     </header>
 
-    <!-- Clientes -->
-    <section id="clientes" class="seccion">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold">Listado de Clientes</h2>
-        <input type="text" id="buscadorClientes" oninput="filtrarTabla('clientes')" placeholder="Buscar cliente..." class="input-field w-1/3" />
-        <button onclick="abrirModalCliente()" class="btn bg-green-600 hover:bg-green-700 ml-4">+ Nuevo Cliente</button>
-      </div>
-      <div class="overflow-auto rounded-lg">
-        <table id="tablaClientes" class="w-full table-auto border-collapse hidden">
-          <thead class="bg-gray-200 text-gray-700"></thead>
-          <tbody class="text-sm"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- Usuarios -->
-    <section id="usuarios" class="seccion hidden">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold">Listado de Usuarios</h2>
-        <input type="text" id="buscadorUsuarios" oninput="filtrarTabla('usuarios')" placeholder="Buscar usuario..." class="input-field w-1/3" />
-        <button onclick="abrirModalUsuario()" class="btn bg-green-600 hover:bg-green-700 ml-4">+ Nuevo Usuario</button>
-      </div>
-      <div class="overflow-auto rounded-lg">
-        <table id="tablaUsuarios" class="w-full table-auto border-collapse hidden">
-          <thead class="bg-gray-200 text-gray-700"></thead>
-          <tbody class="text-sm"></tbody>
-        </table>
+@@ -48,6 +49,22 @@ <h2 class="text-xl font-semibold">Listado de Usuarios</h2>
       </div>
     </section>
 
@@ -65,65 +29,11 @@
       </div>
     </section>
 
-     <!-- Productos -->
-    <section id="productos" class="seccion hidden">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold">Listado de Productos</h2>
-        <input type="text" id="buscadorProductos" oninput="filtrarTabla('productos')" placeholder="Buscar producto..." class="input-field w-1/3" />
-        <button onclick="abrirModalProducto()" class="btn bg-green-600 hover:bg-green-700 ml-4">+ Nuevo Producto</button>
-      </div>
-      <div class="overflow-auto rounded-lg">
-        <table id="tablaProductos" class="w-full table-auto border-collapse hidden">
-          <thead class="bg-gray-200 text-gray-700"></thead>
-          <tbody class="text-sm"></tbody>
-        </table>
-      </div>
-    </section>
-
 
     <div id="resultado" class="mt-6 text-sm text-gray-600 whitespace-pre-wrap"></div>
   </div>
 
-  <!-- Modal Cliente -->
-  <div id="modalCliente" class="modal hidden">
-    <div class="modal-content">
-      <h2 class="text-xl font-semibold mb-4">Nuevo / Editar Cliente</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input type="hidden" id="modalClienteID" />
-        <input id="modalClienteNombre" placeholder="Nombre" class="input-field" />
-        <input id="modalClienteTelefono" placeholder="Teléfono" class="input-field" />
-        <input id="modalClienteEmail" type="email" placeholder="Email" class="input-field" />
-        <input id="modalClienteDireccion" placeholder="Dirección" class="input-field" />
-      </div>
-      <div class="mt-6 flex justify-end gap-2">
-        <button onclick="cerrarModal('modalCliente')" class="btn bg-gray-500 hover:bg-gray-600">Cancelar</button>
-        <button onclick="guardarCliente()" class="btn bg-blue-600 hover:bg-blue-700">Guardar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Usuario -->
-  <div id="modalUsuario" class="modal hidden">
-    <div class="modal-content">
-      <h2 class="text-xl font-semibold mb-4">Nuevo / Editar Usuario</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input type="hidden" id="modalUsuarioID" />
-        <input id="modalUsuarioNombre" placeholder="Nombre" class="input-field" />
-        <select id="modalUsuarioRol" class="input-field">
-          <option value="admin">Admin</option>
-          <option value="user">Usuario</option>
-        </select>
-        <input id="modalUsuarioEmail" type="email" placeholder="Email" class="input-field" />
-        <input id="modalUsuarioPassword" type="password" placeholder="Contraseña" class="input-field" />
-        <label class="flex items-center space-x-2">
-          <input id="modalUsuarioActivo" type="checkbox" checked />
-          <span>Activo</span>
-        </label>
-      </div>
-      <div class="mt-6 flex justify-end gap-2">
-        <button onclick="cerrarModal('modalUsuario')" class="btn bg-gray-500 hover:bg-gray-600">Cancelar</button>
-        <button onclick="guardarUsuario()" class="btn bg-blue-600 hover:bg-blue-700">Guardar</button>
-      </div>
+@@ -94,6 +111,29 @@ <h2 class="text-xl font-semibold mb-4">Nuevo / Editar Usuario</h2>
     </div>
   </div>
 
@@ -148,290 +58,12 @@
         <button onclick="guardarMesa()" class="btn bg-blue-600 hover:bg-blue-700">Guardar</button>
       </div>
     </div>
-
-    <!-- Modal Producto -->
-    <div id="modalProducto" class="modal hidden">
-      <div class="modal-content">
-        <h2 class="text-xl font-semibold mb-4">Nuevo / Editar Producto</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input type="hidden" id="modalProductoID" />
-          <input id="modalProductoNombre" placeholder="Nombre del producto" class="input-field" />
-          <input id="modalProductoPrecio" type="number" placeholder="Precio" class="input-field" />
-          <input id="modalProductoCategoria" placeholder="Categoría" class="input-field" />
-          <input id="modalProductoDescripcion" placeholder="Descripción" class="input-field" />
-          <input id="modalProductoStock" type="number" placeholder="Stock" class="input-field" />
-        </div>
-        <div class="mt-6 flex justify-end gap-2">
-          <button onclick="cerrarModal('modalProducto')" class="btn bg-gray-500 hover:bg-gray-600">Cancelar</button>
-          <button onclick="guardarProducto()" class="btn bg-blue-600 hover:bg-blue-700">Guardar</button>
-        </div>
-      </div>
-    </div>
-    
   </div>
 
   <style>
     .input-field {
       padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 0.375rem;
-      width: 100%;
-    }
-
-    .btn {
-      background-color: #4B5563;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 0.375rem;
-      cursor: pointer;
-    }
-
-    .btn:hover {
-      background-color: #374151;
-    }
-
-    .btn-tab {
-      background: transparent;
-      border: none;
-      padding: 0.5rem 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      color: #4B5563;
-      border-bottom: 2px solid transparent;
-      transition: border-color 0.3s ease;
-      margin-left: 0.5rem;
-    }
-
-    .btn-tab.active {
-      border-bottom-color: #2563eb;
-      color: #2563eb;
-    }
-
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 1rem;
-      max-width: 600px;
-      width: 90%;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    }
-
-    .seccion {
-      display: block;
-    }
-
-    .hidden {
-      display: none;
-    }
-  </style>
-
-  <script>
-    const API_URL = "/api/proxy";
-
-    // Navegación entre secciones
-    function mostrarSeccion(seccion) {
-      document.querySelectorAll(".seccion").forEach((s) => {
-        s.classList.add("hidden");
-      });
-      document.getElementById(seccion).classList.remove("hidden");
-
-      // Cambiar clase active en tabs
-      document.getElementById("tabClientesBtn").classList.toggle("active", seccion === "clientes");
-      document.getElementById("tabUsuariosBtn").classList.toggle("active", seccion === "usuarios");
-
-      if (seccion === "clientes") listarClientes();
-      else if (seccion === "usuarios") listarUsuarios();
-
-      clearResultado();
-    }
-
-    // Helpers API
-    function postAPI(endpoint, action, data = {}) {
-      return fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({ endpoint, action, data }),
-        headers: { "Content-Type": "application/json" },
-      }).then((res) => res.json());
-    }
-
-    function mostrarResultado(msg) {
-      document.getElementById("resultado").innerText = JSON.stringify(msg, null, 2);
-    }
-
-    function clearResultado() {
-      document.getElementById("resultado").innerText = "";
-    }
-
-    /* ----- CLIENTES ----- */
-    function listarClientes() {
-      postAPI("clientes", "listar").then((res) => {
-        if (!res.success) return mostrarResultado(res);
-        renderTabla("clientes", res.data);
-      });
-    }
-
-    function abrirModalCliente(cliente = null) {
-      document.getElementById("modalClienteID").value = cliente?.ID || "";
-      document.getElementById("modalClienteNombre").value = cliente?.Nombre || "";
-      document.getElementById("modalClienteTelefono").value = cliente?.Teléfono || "";
-      document.getElementById("modalClienteEmail").value = cliente?.Email || "";
-      document.getElementById("modalClienteDireccion").value = cliente?.Dirección || "";
-      document.getElementById("modalCliente").classList.remove("hidden");
-    }
-
-    function cerrarModal(id) {
-      document.getElementById(id).classList.add("hidden");
-    }
-
-    function guardarCliente() {
-      const data = {
-        ID: document.getElementById("modalClienteID").value.trim(),
-        Nombre: document.getElementById("modalClienteNombre").value.trim(),
-        Teléfono: document.getElementById("modalClienteTelefono").value.trim(),
-        Email: document.getElementById("modalClienteEmail").value.trim(),
-        Dirección: document.getElementById("modalClienteDireccion").value.trim(),
-      };
-      const action = data.ID ? "actualizar" : "crear";
-      postAPI("clientes", action, data).then((res) => {
-        mostrarResultado(res);
-        cerrarModal("modalCliente");
-        listarClientes();
-      });
-    }
-
-    function eliminarClientePorID(id) {
-      if (!confirm("¿Estás seguro que deseas eliminar este cliente?")) return;
-      postAPI("clientes", "eliminar", { ID: id }).then((res) => {
-        mostrarResultado(res);
-        listarClientes();
-      });
-    }
-
-    /* ----- USUARIOS ----- */
-    function listarUsuarios() {
-      postAPI("usuarios", "listar").then((res) => {
-        if (!res.success) return mostrarResultado(res);
-        renderTabla("usuarios", res.data);
-      });
-    }
-
-    function abrirModalUsuario(usuario = null) {
-      document.getElementById("modalUsuarioID").value = usuario?.ID || "";
-      document.getElementById("modalUsuarioNombre").value = usuario?.Nombre || "";
-      document.getElementById("modalUsuarioRol").value = usuario?.Rol || "user";
-      document.getElementById("modalUsuarioEmail").value = usuario?.Email || "";
-      document.getElementById("modalUsuarioPassword").value = "";
-      document.getElementById("modalUsuarioActivo").checked = usuario?.Activo !== false;
-      document.getElementById("modalUsuario").classList.remove("hidden");
-    }
-
-    function guardarUsuario() {
-      const id = document.getElementById("modalUsuarioID").value.trim();
-      const nombre = document.getElementById("modalUsuarioNombre").value.trim();
-      const rol = document.getElementById("modalUsuarioRol").value;
-      const email = document.getElementById("modalUsuarioEmail").value.trim();
-      const password = document.getElementById("modalUsuarioPassword").value.trim();
-      const activo = document.getElementById("modalUsuarioActivo").checked;
-
-      if (!nombre || !email) {
-        alert("Nombre y Email son obligatorios.");
-        return;
-      }
-
-      // Nota: El hash de contraseña lo debería hacer backend (Apps Script)
-      // Aquí enviamos la contraseña en texto plano (solo demo)
-      const data = {
-        ID: id,
-        Nombre: nombre,
-        Rol: rol,
-        Email: email,
-        ContraseñaHash: password ? password : undefined,
-        Activo: activo,
-      };
-
-      const action = id ? "actualizar" : "crear";
-      postAPI("usuarios", action, data).then((res) => {
-        mostrarResultado(res);
-        cerrarModal("modalUsuario");
-        listarUsuarios();
-      });
-    }
-
-    function eliminarUsuarioPorID(id) {
-      if (!confirm("¿Estás seguro que deseas eliminar este usuario?")) return;
-      postAPI("usuarios", "eliminar", { ID: id }).then((res) => {
-        mostrarResultado(res);
-        listarUsuarios();
-      });
-    }
-
-    /* ----- Renderizado común ----- */
-    function renderTabla(seccion, data) {
-      const table = document.getElementById(`tabla${capitalize(seccion)}`);
-      const thead = table.querySelector("thead");
-      const tbody = table.querySelector("tbody");
-
-      if (data.length === 0) {
-        table.classList.add("hidden");
-        return;
-      }
-
-      let columnas = Object.keys(data[0]);
-      columnas.push("Acciones");
-
-      thead.innerHTML =
-        "<tr>" +
-        columnas
-          .map((k) => `<th class='px-4 py-2 text-left'>${k}</th>`)
-          .join("") +
-        "</tr>";
-
-      tbody.innerHTML = data
-        .map((row) => {
-          let acciones = "";
-          if (seccion === "clientes") {
-            acciones = `
-              <button onclick='abrirModalCliente(${JSON.stringify(row)})' class='text-blue-600 hover:underline mr-2'>Editar</button>
-              <button onclick='eliminarClientePorID("${row.ID}")' class='text-red-600 hover:underline'>Eliminar</button>
-            `;
-          } else if (seccion === "usuarios") {
-            acciones = `
-              <button onclick='abrirModalUsuario(${JSON.stringify(row)})' class='text-blue-600 hover:underline mr-2'>Editar</button>
-              <button onclick='eliminarUsuarioPorID("${row.ID}")' class='text-red-600 hover:underline'>Eliminar</button>
-            `;
-          }
-          return (
-            "<tr class='border-b'>" +
-            Object.values(row)
-              .map((v) => `<td class='px-4 py-2'>${v}</td>`)
-              .join("") +
-            `<td class='px-4 py-2'>${acciones}</td></tr>`
-          );
-        })
-        .join("");
-
-      table.classList.remove("hidden");
-    }
-
-    function filtrarTabla(seccion) {
-      const texto = document.getElementById(`buscador${capitalize(seccion)}`).value.toLowerCase();
-      const filas = document.querySelectorAll(`#tabla${capitalize(seccion)} tbody tr`);
-      filas.forEach((fila) => {
-        fila.style.display = fila.innerText.toLowerCase().includes(texto) ? "" : "none";
-      });
-    }
-
-    function capitalize(texto) {
+@@ -359,6 +399,102 @@ <h2 class="text-xl font-semibold mb-4">Nuevo / Editar Usuario</h2>
       return texto.charAt(0).toUpperCase() + texto.slice(1);
     }
 
@@ -520,10 +152,6 @@
           acciones = `
             <button onclick='abrirModalMesa(${JSON.stringify(row)})' class='text-blue-600 hover:underline mr-2'>Editar</button>
             <button onclick='eliminarMesaPorID("${row.ID}")' class='text-red-600 hover:underline'>Eliminar</button>`;
-        } else if (seccion === "productos") {
-          acciones = `
-            <button onclick='abrirModalProducto(${JSON.stringify(row)})' class='text-blue-600 hover:underline mr-2'>Editar</button>
-            <button onclick='eliminarProductoPorID("${row.ID}")' class='text-red-600 hover:underline'>Eliminar</button>`;
         }
         return (
           "<tr class='border-b'>" +
@@ -534,122 +162,7 @@
 
       table.classList.remove("hidden");
     }
-
-     // Productos
-    function listarProductos() {
-      postAPI("productos", "listar").then(res => {
-        if (!res.success) return mostrarResultado(res);
-        renderTabla("productos", res.data);
-      });
-    }
-
-    function abrirModalProducto(producto = null) {
-      document.getElementById("modalProductoID").value = producto?.ID || "";
-      document.getElementById("modalProductoNombre").value = producto?.Nombre || "";
-      document.getElementById("modalProductoPrecio").value = producto?.Precio || "";
-      document.getElementById("modalProductoCategoria").value = producto?.Categoría || "";
-      document.getElementById("modalProductoDescripcion").value = producto?.Descripción || "";
-      document.getElementById("modalProductoStock").value = producto?.Stock || "";
-      document.getElementById("modalProducto").classList.remove("hidden");
-    }
-
-    function guardarProducto() {
-      const data = {
-        ID: document.getElementById("modalProductoID").value.trim(),
-        Nombre: document.getElementById("modalProductoNombre").value.trim(),
-        Precio: parseFloat(document.getElementById("modalProductoPrecio").value.trim()),
-        Categoría: document.getElementById("modalProductoCategoria").value.trim(),
-        Descripción: document.getElementById("modalProductoDescripcion").value.trim(),
-        Stock: parseInt(document.getElementById("modalProductoStock").value.trim()),
-      };
-      const action = data.ID ? "actualizar" : "crear";
-      postAPI("productos", action, data).then((res) => {
-        mostrarResultado(res);
-        cerrarModal("modalProducto");
-        listarProductos();
-      });
-    }
-
-    function eliminarProductoPorID(id) {
-      if (!confirm("¿Estás seguro que deseas eliminar este producto?")) return;
-      postAPI("productos", "eliminar", { ID: id }).then((res) => {
-        mostrarResultado(res);
-        listarProductos();
-      });
-    }
-    function postAPI(seccion, action, data = {}) {
-    return fetch("/api/proxy", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ seccion, action, data }),
-    })
-      .then(res => res.json())
-      .catch(err => ({ success: false, message: "Error al conectar", error: err }));
-  }
-
-  function cerrarModal(id) {
-    document.getElementById(id).classList.add("hidden");
-  }
-
-  function mostrarResultado(res) {
-    const div = document.getElementById("resultado") || document.createElement("div");
-    div.id = "resultado";
-    div.className = "mt-6 text-sm text-gray-600 whitespace-pre-wrap";
-    div.textContent = JSON.stringify(res, null, 2);
-    if (!document.body.contains(div)) document.body.appendChild(div);
-  }
-
-  function clearResultado() {
-    const div = document.getElementById("resultado");
-    if (div) div.innerHTML = "";
-  }
-
-  function renderTabla(seccion, data) {
-    const table = document.getElementById(`tabla${capitalize(seccion)}`);
-    const thead = table.querySelector("thead");
-    const tbody = table.querySelector("tbody");
-
-    if (!data || data.length === 0) {
-      table.classList.add("hidden");
-      return;
-    }
-
-    let columnas = Object.keys(data[0]);
-    columnas.push("Acciones");
-
-    thead.innerHTML = "<tr>" + columnas.map(k => `<th class='px-4 py-2 text-left'>${k}</th>`).join("") + "</tr>";
-
-    tbody.innerHTML = data.map(row => {
-      let acciones = `<button onclick='abrirModalProducto(${JSON.stringify(row)})' class='text-blue-600 hover:underline mr-2'>Editar</button>
-                      <button onclick='eliminarProductoPorID("${row.ID}")' class='text-red-600 hover:underline'>Eliminar</button>`;
-      return (
-        "<tr class='border-b'>" +
-        Object.values(row).map((v) => `<td class='px-4 py-2'>${v}</td>`).join("") +
-        `<td class='px-4 py-2'>${acciones}</td></tr>`
-      );
-    }).join("");
-
-    table.classList.remove("hidden");
-  }
-
-  function capitalize(texto) {
-    return texto.charAt(0).toUpperCase() + texto.slice(1);
-  }
-
-  function mostrarSeccion(seccion) {
-    document.querySelectorAll(".seccion").forEach((s) => s.classList.add("hidden"));
-    document.getElementById(seccion).classList.remove("hidden");
-    document.querySelectorAll(".btn-tab").forEach(b => b.classList.remove("active"));
-    const boton = document.getElementById("tab" + capitalize(seccion) + "Btn");
-    if (boton) boton.classList.add("active");
-
-    if (seccion === "productos") listarProductos();
-    clearResultado();
-  }
     
     // Inicializar con clientes visibles
     window.onload = () => mostrarSeccion("clientes");
   </script>
-</body>
-
-</html>
